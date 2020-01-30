@@ -64,8 +64,9 @@ jobs:
 
       - name: Costom configure file
         run: |
-          rm -f ./.config*
-          wget https://raw.githubusercontent.com/allenbyus/shell-script/master/openwrt-make-config/.config
+          rm -rf ./.config*
+          wget -o .config https://raw.githubusercontent.com/allenbyus/shell-script/master/openwrt-make-config/.config
+          sleep 10s
           make defconfig
 
       - name: Make download
