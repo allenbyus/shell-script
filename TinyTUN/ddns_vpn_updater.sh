@@ -12,7 +12,7 @@ doUpdate(){
 	bash /etc/v/cidr-cn.sh
 }
 network_check=$(curl -s -w %{http_code} ip.sb)
-if [[ "${network_check}" = "000" ]];then
+if [ "${network_check}" = "000" ];then
 	echo "网络连接：fail"
 	pkill tinytun
 	ip route del default
