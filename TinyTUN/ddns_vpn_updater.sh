@@ -5,6 +5,12 @@ doAddChinaRoute(){
         ip route add $line via 10.170.0.1 dev eth0
     done
 }
+doDelChinaRoute(){
+    for line in `cat /root/cidr-cn.txt`
+    do
+        ip route del $line via 10.170.0.1 dev eth0
+    done
+}
 doUpdate(){
     pkill tinytun
     VPN=`tinytun -k mypassword123 -c ${1}:10001 -d 'tap0'`
@@ -23,6 +29,7 @@ doSourceNetworkRoute(){
     ip route del default
     ip route add default via 10.170.0.1 dev eth0
     echo 1.1.1.1>ddnsip.txt
+    doDelChinaRoute
     echo "已恢复源网路路由"
 }
 network_check=$(curl --interface tap0 -s -w %{http_code} ip.sb)
