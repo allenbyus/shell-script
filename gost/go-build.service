@@ -1,0 +1,15 @@
+[Unit]
+Description=go-build
+Documentation=go-build
+After=network.target network-online.target nss-lookup.target mysql.service mariadb.service mysqld.service
+
+[Service]
+Type=simple
+StandardError=journal
+User=nobody
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+ExecStart=/usr/bin/go-build
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
