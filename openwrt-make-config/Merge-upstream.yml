@@ -1,0 +1,53 @@
+#
+# This is free software, lisence use MIT.
+# 
+# Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
+# 
+# <https://github.com/KFERMercer/OpenWrt-CI>
+#
+
+name: Merge-upstream
+
+on:
+  schedule:
+    - cron: 30 19 * * *
+  push:
+    branches: 
+    - master
+
+jobs:
+
+  merge:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@master
+      with:
+        ref: master
+        fetch-depth: 0
+        lfs: true
+
+    - name: Set git identity
+      run : |
+        git config --global user.email "28820818+allenbyus@users.noreply.github.com"
+        git config --global user.name "allenbyus"
+    - name: Load upstream commits
+      run : |
+        #git pull https://github.com/coolsnowwolf/lede.git --no-edit
+        git checkout -b coolsnowwolf-master master
+        git pull https://github.com/coolsnowwolf/lede.git master
+    #- name: RM
+       #run: git rm -r -f .github/workflows/* && rm -rf .github/workflows/*
+
+    - name: Push Commits
+      env:
+        DOWNSTREAM_BRANCH: master
+        TOKEN: ${{secrets.PAT}}
+      run : |
+        #git push origin $DOWNSTREAM_BRANCH
+        git checkout master
+        git merge --no-ff coolsnowwolf-master
+        git push origin master
