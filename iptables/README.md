@@ -1,4 +1,5 @@
-```iptables定义规则:格式：iptables [-t table] COMMAND chain CRETIRIA -j ACTION
+```
+iptables定义规则:格式：iptables [-t table] COMMAND chain CRETIRIA -j ACTION
 iptables [-t表名]  <链名> <动作>
 -t table ：指定设置的表：filter nat mangle  不指定默认为filter
 COMMAND：定义如何对规则进行管理
@@ -49,4 +50,4 @@ CRETIRIA 详解：
      MASQUERADE：源地址伪装
      REDIRECT：重定向：主要用于实现端口重定向
      RETURN：返回：在自定义链执行完毕后使用返回，来返回原规则链
-     ```
+```
