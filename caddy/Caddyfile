@@ -1,0 +1,27 @@
+{
+    experimental_http3
+}
+0707.xyz {
+    encode zstd gzip
+    tls it@0707.xyz {
+        protocols tls1.2 tls1.3
+    }
+    redir https://www.0707.xyz{uri}
+}
+www.0707.xyz {
+    encode zstd gzip
+    tls it@0707.xyz {
+        protocols tls1.2 tls1.3
+    }
+    root * /var/www/0707.xyz/html
+    log {
+        output file /var/log/caddy/0707.xyz.access.log {
+            roll_size 3MiB
+	    roll_keep 5
+	    roll_keep_for 48h
+        }
+        format console
+    }
+    php_fastcgi unix//run/php/php7.4-fpm.sock
+    file_server
+}

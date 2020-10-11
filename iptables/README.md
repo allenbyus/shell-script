@@ -51,3 +51,23 @@ CRETIRIA 详解：
      REDIRECT：重定向：主要用于实现端口重定向
      RETURN：返回：在自定义链执行完毕后使用返回，来返回原规则链
 ```
+```
+查看规则:
+
+iptables -L 列出默认表 filter 所有链上的规则。
+iptables -t nat -L 列出 nat 表中所有链上的规则
+iptables -t nat -L PREROUTING 列出 nat 表中 PREROUTING 链上的规则
+拦截特定流量:
+
+iptables -t filter -A INPUT -s 11.11.11.11 -j DROP 拦截来自特定 IP 地址(11.11.11.11)对本地服务全部流量
+iptables -t filter -D INPUT -s 11.11.11.11 -j DROP 删除上一条拦截规则
+iptables -t filter -A INPUT -p tcp -sport 445 -j DROP 封锁特定端口(TCP 445)
+iptables -t filter -A INPUT -p icmp --icmp-type echo-request -j REJECT ---reject-with icmp-host-prohibited 禁止 ICMP (ping)
+iptables -t filter -A OUTPUT -p tcp --dport 80 -m state --state NEW -j DROP 禁止从80端口发起新的TCP连接但允许80端口响应TCP连接
+作为网关提供NAT服务:
+
+iptables -t nat -A POSTROUTING -s 192.168.2.0/24 -j SNAT --to-source 192.168.1.1 将来自192.168.2.0/24子网数据包源地址改写为192.168.1.1
+iptables -t nat -A POSTROUTING -s 192.168.2.0/24 -j MASQUERADE 将来自192.168.2.0/24子网数据包源地址改写为防火墙地址
+iptables -t nat -A PREROUTING -d 192.168.1.1/24 --dport 80 -j DNAT --to-destination 192.168.1.11:80 将对192.168.1.1:80的数据包发送到192.168.1.11:80
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080将对本地80端口的数据包重定向到8080
+```
