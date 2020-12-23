@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+
+
+name="tgpush"
+command="/usr/local/bin/$name"
+command_args="-c /usr/local/etc/$name/config.yml"
+command_background="yes"
+command_user="nobody"
+pidfile="/run/$name.pid"
+
+depend() {
+        need net localmount
+        after firewall
+}
