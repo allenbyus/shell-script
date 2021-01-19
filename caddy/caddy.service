@@ -1,16 +1,20 @@
-Description=caddy
-
-Wants=network.target
-After=syslog.target network-online.target
+[Unit]
+Description=Caddy
+Documentation=https://caddyserver.com/docs/
+After=network.target network-online.target
+Requires=network-online.target
 
 [Service]
-Type=simple
-Environment=GOGC=20
-ExecStart=/usr/local/bin/caddy run --config /usr/local/etc/caddy/Caddyfile
-Restart=on-failure
-RestartSec=10
-KillMode=process
-LimitNOFILE=65536
+User=caddy
+Group=caddy
+ExecStart=/usr/local/bin/caddy run --environ --config /usr/local/etc/caddy/Caddyfile
+ExecReload=/usr/local/bin/caddy reload --config /usr/local/etc/caddy/Caddyfile
+TimeoutStopSec=5s
+LimitNOFILE=1048576
+LimitNPROC=512
+PrivateTmp=true
+ProtectSystem=full
+AmbientCapabilities=CAP_NET_BIND_SERVICE
 
 [Install]
 WantedBy=multi-user.target
