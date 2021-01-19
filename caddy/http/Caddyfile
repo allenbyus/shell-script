@@ -1,0 +1,7 @@
+example.xyz {
+    root * /var/www/example.xyz/html
+    php_fastcgi unix//run/php/php7.4-fpm.sock
+    file_server
+    #allow access directory
+    #file_server browse
+}

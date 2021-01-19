@@ -1,0 +1,23 @@
+#/etc/init.d/*
+
+
+#!/sbin/openrc-run
+
+
+name=$RC_SVCNAME
+command="$PYTHON_BIN"
+command_args="$SCRIPT_FILE $OPTS"
+command_background="yes"
+command_user="nobody"
+pidfile="/run/$RC_SVCNAME.pid"
+
+depend() {
+        need net localmount
+        after firewall
+}
+
+start_pre() {
+    logger "$RC_SVCNAME starting"
+    logger "$RC_SVCNAME config: $FLASK_CONFIG"
+    export FLASK_CONFIG=$FLASK_CONFIG
+}
